@@ -1,0 +1,123 @@
+<form (ngSubmit)="storeTransaction()">
+  <div class="row mb-4">
+    <div class="col-md-4">
+    <label for="category">Categoria: </label>
+    <select id="category" name="category" class="form-select" [(ngModel)]="newTransaction.categoryID" required="">
+      <option *ngFor="let category of categories" [value]="category.idCategory">{{ category.name }}</option>
+    </select>
+
+  </div>
+  
+  <div class="col-md-4">
+    <label for="type">Tipo:</label>
+    <select name="type" class="form-select" [(ngModel)]="newTransaction.type" required>
+      <option value="income">Receita</option>
+      <option value="expense">Despesa</option>
+    </select>
+  </div>
+
+  <div class="col-md-4">
+    <label for="amount">Quantidade: </label>
+    <input name="amount" type="number" placeholder="Digite o valor" class="form-control amountclass" [(ngModel)]="newTransaction.amount" required>
+  </div>
+
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-6">
+    <label for="description">Descrição:</label>
+    <textarea name="description" class="form-control" [(ngModel)]="newTransaction.description" required></textarea>
+
+  </div>
+
+  <div class="col-md-6">
+    <label for="transactionDate" >Data:</label>
+    <input  name="transactionDate" type="datetime-local" class="form-control dateinput" [(ngModel)]="newTransaction.transactionDate" required>
+  </div>
+
+</div>
+  <input type="submit" value="Registrar" class="btn btn-primary mb-4">
+
+</form>
+
+
+<div class="mb-3">
+  <label for="filterType" class="form-label">Filtrar por Tipo</label>
+  <select id="filterType" class="form-select" [(ngModel)]="filterType" (change)="applyFilter()">
+    <option value="">Todos</option>
+    <option value="income">Receita</option>
+    <option value="expense">Despesa</option>
+  </select>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Categoria</th>
+      <th scope="col">Tipo</th>
+      <th scope="col">Quantidade</th>
+      <th scope="col">Descrição</th>
+      <th scope="col">Data</th>
+      <th scope="col">Criação</th>
+      <th scope="col">Última Atualização</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let transaction of filteredTransactions">
+      <th scope="row">{{transaction.categoryID ? getCategoryName(transaction.categoryID) : 'Categoria Desconhecida'}}</th>
+      <td>{{transaction.type === 'income' ? 'Receita' : 'Despesa'}}</td>
+      <td>{{transaction.amount | number: '1.2-2'}}</td>
+      <td>{{transaction.description}}</td>
+      <td>{{transaction.transactionDate | date: 'dd/MM/yyyy HH:mm'}}</td>
+      <td>{{transaction.createAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+      <td>{{transaction.updateAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+      <td><button type="button" class="btn btn-danger btn-sm" (click)="deleteTransaction(transaction)">Excluir</button>
+      </td>
+      <td><button type="button" class="btn btn-success btn-sm" (click)="openEditModal(transaction)">Editar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="modal fade" id="editTransactionModal" tabindex="-1" aria-labelledby="editTransactionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editTransactionModalLabel">Editar Transação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedTransaction">
+        <form (ngSubmit)="updateTransaction()">
+          <div class="mb-3">
+            <label for="editCategory" class="form-label">Categoria</label>
+            <select id="editCategory" class="form-select" [(ngModel)]="selectedTransaction.categoryID" name="category" required>
+              <option *ngFor="let category of categories" [value]="category.idCategory">{{ category.name }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="editType" class="form-label">Tipo</label>
+            <select id="editType" class="form-select" [(ngModel)]="selectedTransaction.type" name="type" required>
+              <option value="income">Receita</option>
+              <option value="expense">Despesa</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="editAmount" class="form-label">Quantidade</label>
+            <input id="editAmount" type="number" class="form-control" [(ngModel)]="selectedTransaction.amount" name="amount" required>
+          </div>
+          <div class="mb-3">
+            <label for="editDescription" class="form-label">Descrição</label>
+            <textarea id="editDescription" class="form-control" [(ngModel)]="selectedTransaction.description" name="description" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="editTransactionDate" class="form-label">Data</label>
+            <input id="editTransactionDate" type="datetime-local" class="form-control" [(ngModel)]="selectedTransaction.transactionDate" name="transactionDate" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Salvar alterações</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+

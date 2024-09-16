@@ -1,0 +1,5 @@
+table {
+  max-height: 250px; 
+  overflow-y: auto;
+  border: 1px solid #ddd; 
+}
