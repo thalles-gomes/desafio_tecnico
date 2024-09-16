@@ -4,9 +4,10 @@
 -- Alterar no arquivo ".env" as credenciais do banco de dados. </br>
 
 Instalar as dependencias do PHP</br>
-
--- composer install
 -----
 
+-- composer install
+
 Gerar a chave para o arquivo ".env"</br>
+------
 -- php artisan key:generate
