@@ -4,6 +4,7 @@
 -- Alterar no arquivo ".env" as credenciais do banco de dados. </br>
 
 Instalar as dependencias do PHP</br>
+
 -- composer install
 -----
 
